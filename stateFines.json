@@ -1,0 +1,1094 @@
+[
+  {
+    "state": "Alabama",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "20",
+      "range": "190-263",
+      "value": 190
+    },
+    "redLight": {
+      "base": "20",
+      "range": "190-263",
+      "value": 190
+    },
+    "speeding": {
+      "base": "20",
+      "range": "190-263",
+      "value": 190,
+      "definition": "Speeding less than 25mph over limit"
+    },
+    "fipsCode": "01",
+    "short": "AL"
+  },
+  {
+    "state": "Alaska",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "150",
+      "range": "160.00",
+      "value": 150
+    },
+    "redLight": {
+      "base": "150",
+      "range": "160.00",
+      "value": 160
+    },
+    "speeding": {
+      "base": "32-72",
+      "range": "42-82",
+      "value": 42,
+      "definition": "Speeding 4-9mph over limit"
+    },
+    "fipsCode": "02",
+    "short": "AK"
+  },
+  {
+    "state": "Arizona",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "186",
+      "range": "213.45",
+      "value": 213.45
+    },
+    "redLight": {
+      "base": "245",
+      "range": "272.45",
+      "value": 272.45
+    },
+    "speeding": {
+      "base": "186",
+      "range": "213.45",
+      "value": 213.45,
+      "definition": "Speeding 1-9mph over limit"
+    },
+    "fipsCode": "04",
+    "short": "AZ"
+  },
+  {
+    "state": "Arkansas",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "100 max",
+      "range": "N/A",
+      "value": 100
+    },
+    "redLight": {
+      "base": "100 max",
+      "range": "N/A",
+      "value": 100
+    },
+    "speeding": {
+      "base": "100 max",
+      "range": "N/A",
+      "value": 100,
+      "definition": "Speeding up to 15mph over limit"
+    },
+    "fipsCode": "05",
+    "short": "AR"
+  },
+  {
+    "state": "California",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "35",
+      "range": "238.00",
+      "value": 238
+    },
+    "redLight": {
+      "base": "100",
+      "range": "490.00",
+      "value": 490
+    },
+    "speeding": {
+      "base": "35",
+      "range": "233.00",
+      "value": 233,
+      "definition": "Speeding 1-15mph over limit"
+    },
+    "fipsCode": "06",
+    "short": "CA"
+  },
+  {
+    "state": "Colorado",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "100.00",
+      "value": 100
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "100.00",
+      "value": 100
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "75.00",
+      "value": 75,
+      "definition": "Speeding 5-9mph over"
+    },
+    "fipsCode": "08",
+    "short": "CO"
+  },
+  {
+    "state": "Connecticut",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "50",
+      "range": "129.00",
+      "value": 129
+    },
+    "redLight": {
+      "base": "70",
+      "range": "129.00",
+      "value": 129
+    },
+    "speeding": {
+      "base": "50",
+      "range": "132.00",
+      "value": 132,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "09",
+    "short": "CT"
+  },
+  {
+    "state": "Delaware",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "25.00",
+      "range": "119.50",
+      "value": 119.5
+    },
+    "redLight": {
+      "base": "29.00",
+      "range": "110.50",
+      "value": 110.5
+    },
+    "speeding": {
+      "base": "55.00",
+      "range": "164.50",
+      "value": 164.5,
+      "definition": "Speeding 15mph over"
+    },
+    "fipsCode": "10",
+    "short": "DE"
+  },
+  {
+    "state": "Florida",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "60",
+      "range": "179.00",
+      "value": 179
+    },
+    "redLight": {
+      "base": "60",
+      "range": "277.00",
+      "value": 277
+    },
+    "speeding": {
+      "base": "25",
+      "range": "144.00",
+      "value": 144,
+      "definition": "Speeding 6-9mph over"
+    },
+    "fipsCode": "12",
+    "short": "FL"
+  },
+  {
+    "state": "Georgia",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "265.00",
+      "value": 265
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "265.00",
+      "value": 265
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "150.00",
+      "value": 150,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "13",
+    "short": "GA"
+  },
+  {
+    "state": "Hawaii",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "200 max",
+      "range": "N/A",
+      "value": 200
+    },
+    "redLight": {
+      "base": "200 max",
+      "range": "N/A",
+      "value": 200
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "N/A",
+      "value": -1,
+      "definition": "Speeding"
+    },
+    "fipsCode": "15",
+    "short": "HI"
+  },
+  {
+    "state": "Idaho",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "90.00",
+      "value": 90
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "90.00",
+      "value": 90
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "90.00",
+      "value": 90,
+      "definition": "Speeding 1-15mph over"
+    },
+    "fipsCode": "16",
+    "short": "ID"
+  },
+  {
+    "state": "Illinois",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "",
+      "range": "60.00",
+      "value": 60
+    },
+    "redLight": {
+      "base": "",
+      "range": "100.00",
+      "value": 100
+    },
+    "speeding": {
+      "base": "",
+      "range": "35.00",
+      "value": 35,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "17",
+    "short": "IL"
+  },
+  {
+    "state": "Indiana",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "153.50",
+      "value": 153.50
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "N/A",
+      "value": -1
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "153.50",
+      "value": 153.50,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "18",
+    "short": "IN"
+  },
+  {
+    "state": "Iowa",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "100",
+      "range": "195.00",
+      "value": 195.00
+    },
+    "redLight": {
+      "base": "100",
+      "range": "195.00",
+      "value": 195.00
+    },
+    "speeding": {
+      "base": "40",
+      "range": "114.00",
+      "value": 114.00,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "19",
+    "short": "IA"
+  },
+  {
+    "state": "Kansas",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "80",
+      "range": "143.00",
+      "value": 143.00
+    },
+    "redLight": {
+      "base": "80",
+      "range": "143.00",
+      "value": 143.00
+    },
+    "speeding": {
+      "base": "50",
+      "range": "113.00",
+      "value": 113.00,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "20",
+    "short": "KS"
+  },
+  {
+    "state": "Kentucky",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "20-100",
+      "range": "163-243",
+      "value": 163.00
+    },
+    "redLight": {
+      "base": "20-100",
+      "range": "163-243",
+      "value": 163.00
+    },
+    "speeding": {
+      "base": "20.00",
+      "range": "163.00",
+      "value": 163.00,
+      "definition": "Speeding 10mph over"
+    },
+    "fipsCode": "21",
+    "short": "KY"
+  },
+  {
+    "state": "Louisiana",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "222.50",
+      "value": 222.50
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "222.50",
+      "value": 222.50
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "157.50",
+      "value": 157.50,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "22",
+    "short": "LA"
+  },
+  {
+    "state": "Maine",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "131.00",
+      "value": 131.00
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "131.00",
+      "value": 131.00
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "119.00",
+      "value": 119.00,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "23",
+    "short": "ME"
+  },
+  {
+    "state": "Maryland",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "90.00",
+      "value": 90.00
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "140.00",
+      "value": 140.00
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "80.00",
+      "value": 80.00,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "24",
+    "short": "MD"
+  },
+  {
+    "state": "Massachusetts",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "105.00",
+      "value": 105.00
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "N/A",
+      "value": -1
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "155.00",
+      "value": 155,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "25",
+    "short": "MA"
+  },
+  {
+    "state": "Michigan",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "35.00",
+      "range": "110-128",
+      "value": 110
+    },
+    "redLight": {
+      "base": "35.00",
+      "range": "110-128",
+      "value": 110
+    },
+    "speeding": {
+      "base": "6-30",
+      "range": "81-123",
+      "value": 81,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "26",
+    "short": "MI"
+  },
+  {
+    "state": "Minnesota",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "50.00",
+      "range": "125.00",
+      "value": 125
+    },
+    "redLight": {
+      "base": "50.00",
+      "range": "125.00",
+      "value": 125
+    },
+    "speeding": {
+      "base": "40.00",
+      "range": "115.00",
+      "value": 115,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "27",
+    "short": "MN"
+  },
+  {
+    "state": "Mississippi",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "227.50",
+      "value": 227.5
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "227.50",
+      "value": 227.5
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "197.50",
+      "value": 197.5,
+      "definition": "Speeding 10-12mph over"
+    },
+    "fipsCode": "28",
+    "short": "MS"
+  },
+  {
+    "state": "Missouri",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "30.50",
+      "range": "97.00",
+      "value": 97
+    },
+    "redLight": {
+      "base": "30.50",
+      "range": "97.00",
+      "value": 97
+    },
+    "speeding": {
+      "base": "30.50",
+      "range": "97.00",
+      "value": 97,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "29",
+    "short": "MO"
+  },
+  {
+    "state": "Montana",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "50",
+      "range": "85.00",
+      "value": 85
+    },
+    "redLight": {
+      "base": "50",
+      "range": "85.00",
+      "value": 85
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "20.00",
+      "value": 20,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "30",
+    "short": "MT"
+  },
+  {
+    "state": "Nebraska",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "75.00",
+      "range": "124.00",
+      "value": 124
+    },
+    "redLight": {
+      "base": "75.00",
+      "range": "124.00",
+      "value": 124
+    },
+    "speeding": {
+      "base": "25.00",
+      "range": "74.00",
+      "value": 74,
+      "definition": "Speeding 5-10mph over "
+    },
+    "fipsCode": "31",
+    "short": "NE"
+  },
+  {
+    "state": "Nevada",
+    "dataAvail": false,
+    "fipsCode": "32",
+    "short": "NV"
+  },
+  {
+    "state": "New Hampshire",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "124.00",
+      "value": 124
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "62.00",
+      "value": 62
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "62.00",
+      "value": 62,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "33",
+    "short": "NH"
+  },
+  {
+    "state": "New Jersey",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "85.00",
+      "range": "118.00",
+      "value": 118
+    },
+    "redLight": {
+      "base": "85.00",
+      "range": "118.00",
+      "value": 118
+    },
+    "speeding": {
+      "base": "85.00",
+      "range": "118.00",
+      "value": 118,
+      "definition": "Speeding 1-9mph over"
+    },
+    "fipsCode": "34",
+    "short": "NJ"
+  },
+  {
+    "state": "New Mexico",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "25.00",
+      "range": "53.00",
+      "value": 53
+    },
+    "redLight": {
+      "base": "25.00",
+      "range": "53.00",
+      "value": 53
+    },
+    "speeding": {
+      "base": "15.00",
+      "range": "43.00",
+      "value": 43,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "35",
+    "short": "NM"
+  },
+  {
+    "state": "New York",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "200.00",
+      "range": "288.00",
+      "value": 288
+    },
+    "redLight": {
+      "base": "250.00",
+      "range": "338.00",
+      "value": 338
+    },
+    "speeding": {
+      "base": "Court",
+      "value": -1,
+      "definition": "Speeding"
+    },
+    "fipsCode": "36",
+    "short": "NY"
+  },
+  {
+    "state": "North Carolina",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "50.00",
+      "range": "228.00",
+      "value": 228
+    },
+    "redLight": {
+      "base": "50.00",
+      "range": "228.00",
+      "value": 228
+    },
+    "speeding": {
+      "base": "15.00",
+      "range": "193.00",
+      "value": 193,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "37",
+    "short": "NC"
+  },
+  {
+    "state": "North Dakota",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "20.00",
+      "value": 20
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "20.00",
+      "value": 20
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "5-10",
+      "value": 5,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "38",
+    "short": "ND"
+  },
+  {
+    "state": "Ohio",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "N/A",
+      "value": -1
+    },
+    "redLight": {
+      "base": "34.00",
+      "range": "169.00",
+      "value": 169
+    },
+    "speeding": {
+      "base": "29.00",
+      "range": "164.00",
+      "value": 164,
+      "definition": "Speeding 1-15mph over"
+    },
+    "fipsCode": "39",
+    "short": "OH"
+  },
+  {
+    "state": "Oklahoma",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "274.00",
+      "value": 274
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "274.00",
+      "value": 274
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "174.00",
+      "value": 174,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "40",
+    "short": "OK"
+  },
+  {
+    "state": "Oregon",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "260.00",
+      "range": "260.00",
+      "value": 260
+    },
+    "redLight": {
+      "base": "260.00",
+      "range": "260.00",
+      "value": 260
+    },
+    "speeding": {
+      "base": "110.00",
+      "range": "110.00",
+      "value": 110,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "41",
+    "short": "OR"
+  },
+  {
+    "state": "Pennsylvania",
+    "dataAvail": false,
+    "fipsCode": "42",
+    "short": "PA"
+  },
+  {
+    "state": "Rhode Island",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "85.00",
+      "value": 85
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "85.00",
+      "value": 85
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "95.00",
+      "value": 95,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "44",
+    "short": "RI"
+  },
+  {
+    "state": "South Carolina",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "237.50",
+      "value": 237.5
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "237.50",
+      "value": 237.5
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "81.88",
+      "value": 81.88,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "45",
+    "short": "SC"
+  },
+  {
+    "state": "South Dakota",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "54.00",
+      "range": "120.00",
+      "value": 120
+    },
+    "redLight": {
+      "base": "54.00",
+      "range": "120.00",
+      "value": 120
+    },
+    "speeding": {
+      "base": "39.00",
+      "range": "105.00",
+      "value": 105,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "46",
+    "short": "SD"
+  },
+  {
+    "state": "Tennessee",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "116.50",
+      "value": 116.5
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "116.50",
+      "value": 116.5
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "116.50",
+      "value": 116.5,
+      "definition": "Speeding 1-14mph over"
+    },
+    "fipsCode": "47",
+    "short": "TN"
+  },
+  {
+    "state": "Texas",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "235.00",
+      "value": 235
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "235.00",
+      "value": 235
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "180.00",
+      "value": 180,
+      "definition": "Speeding 6-9mph over"
+    },
+    "fipsCode": "48",
+    "short": "TX"
+  },
+  {
+    "state": "Utah",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "120.00",
+      "range": "162.00",
+      "value": 162
+    },
+    "redLight": {
+      "base": "120.00",
+      "range": "162.00",
+      "value": 162
+    },
+    "speeding": {
+      "base": "120.00",
+      "range": "162.00",
+      "value": 162,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "49",
+    "short": "UT"
+  },
+  {
+    "state": "Vermont",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "162.00",
+      "value": 162
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "220.00",
+      "value": 220
+    },
+    "speeding": {
+      "base": "5-50",
+      "range": "52.75-104.5",
+      "value": 52.75,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "50",
+    "short": "VT"
+  },
+  {
+    "state": "Virginia",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "30.00",
+      "range": "81.00",
+      "value": 81
+    },
+    "redLight": {
+      "base": "100.00",
+      "range": "151.00",
+      "value": 151
+    },
+    "speeding": {
+      "base": "36-60",
+      "range": "87-111",
+      "value": 87,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "51",
+    "short": "VA"
+  },
+  {
+    "state": "Washington",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "48",
+      "range": "85.00",
+      "value": 85
+    },
+    "redLight": {
+      "base": "48",
+      "range": "85.00",
+      "value": 85
+    },
+    "speeding": {
+      "base": "48",
+      "range": "85.00",
+      "value": 85,
+      "definition": "Speeding 6-10mph over"
+    },
+    "fipsCode": "53",
+    "short": "WA"
+  },
+  {
+    "state": "West Virginia",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "157.00",
+      "value": 157
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "157.00",
+      "value": 157
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "137.00",
+      "value": 137,
+      "definition": "Speeding 5-9mph over"
+    },
+    "fipsCode": "54",
+    "short": "WV"
+  },
+  {
+    "state": "Wisconsin",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "30",
+      "range": "175.30",
+      "value": 175.3
+    },
+    "redLight": {
+      "base": "30",
+      "range": "175.30",
+      "value": 175.3
+    },
+    "speeding": {
+      "base": "30",
+      "range": "175.30",
+      "value": 175.3,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "55",
+    "short": "WI"
+  },
+  {
+    "state": "Wyoming",
+    "dataAvail": true,
+    "stopSign": {
+      "base": "N/A",
+      "range": "110.00",
+      "value": 110
+    },
+    "redLight": {
+      "base": "N/A",
+      "range": "110.00",
+      "value": 110
+    },
+    "speeding": {
+      "base": "N/A",
+      "range": "47-100",
+      "value": 47,
+      "definition": "Speeding 1-10mph over"
+    },
+    "fipsCode": "56",
+    "short": "WY"
+  },
+  {
+    "state": "District of Columbia",
+    "dataAvail": false,
+    "fipsCode": 11
+  },
+  {
+    "state": "American Samoa",
+    "dataAvail": false,
+    "fipsCode": 60
+  },
+  {
+    "state": "Guam",
+    "dataAvail": false,
+    "fipsCode": 66
+  },
+  {
+    "state": "Puerto Rico",
+    "dataAvail": false,
+    "fipsCode": 72
+  },
+  {
+    "state": "Virgin Island",
+    "dataAvail": false,
+    "fipsCode": 78
+  }
+]
