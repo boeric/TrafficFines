@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Version 0.9.1 -->
+<!-- Version 0.9.2 -->
 <!-- Adapted and expanded by Bo Ericsson, boe@net -->
 <!-- Created for LCCR, https://www.lccr.com/ -->
 <!-- Based on Mike Bostock's example: https://bl.ocks.org/mbostock/4060606 -->
@@ -8,7 +8,15 @@
 
 <style>
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+  /*font-family: "Helvetica Neue", Helvetica, Arial, sans-serif*/
+  font-family: museo-sans, sans-serif;
+  font-style: normal;
+  font-weight: 300;
+}
+.map {
+  font-family: museo-sans, sans-serif;
+  font-style: normal;
+  font-weight: 300;
 }
 .states {
   fill: none;
@@ -18,10 +26,11 @@ body {
 svg {
   /*border: 1px solid gray;*/
 }
+.selectDivContainer {
+  max-width: 960px;
+}
 .selectDiv {
-  position: absolute;
-  top: 65px;
-  left: 380px;
+  text-align: center;
   background-color: white;
 }
 select {
@@ -51,369 +60,409 @@ h2 {
 .footer {
   margin-left: 20px;
 }
+.map {
+  /*border: 1px solid black;*/
+}
 </style>
 
 <body>
-<div>
-  <span>
-    <h2>How Do California’s Traffic Fines and Fees Compare?</h2>
-  </span>
+<div class="map">
 </div>
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
 <script src="https://d3js.org/topojson.v2.min.js"></script>
 <script>
 "use strict";
-
-var LEGEND_Y = 650;
-var LEGEND_X = 350;
-
-// Get url and derive base url
-var url = window.location.href;
-var queryStart = url.search(/\?(.*)/);
-if (queryStart === -1) queryStart = Infinity;
-var baseUrl = url.substr(0, queryStart);
-var fmt = d3.format(".2f");
-
-// Get query string value
-// (we're picking up the value of the first query string parameter)
-var query = url.substring(queryStart + 1);
-var chosenSeries = query ? query.split("=")[1] : "";
-
-// Define the three data series
-var dataSeries = [
-  {
-    key: "redLight",
-    title: "Red Light Violations",
-    subTitle: "Average Ticket Amount",
-    domain: [0, 500],
-    steps: 10,
-    ca: 490
-  },
-  {
-    key: "speeding",
-    title: "Speeding Violations",
-    subTitle: "Average Ticket Amount",
-    domain: [0, 250],
-    steps: 5,
-    ca: 233
-  },
-  {
-    key: "stopSign",
-    title: "Stop Sign Violations",
-    subTitle: "Average Ticket Amount",
-    domain: [0, 300],
-    steps: 6,
-    ca: 238
-  }
-]
-
-// Set default series to red light violations
-var usedSeries = dataSeries[0];
-
-// Attempt to find the series indicated by the user
-dataSeries.some(function(d) {
-  if (d.key === chosenSeries) {
-    usedSeries = d;
-    return true;
-  }
-})
-
-// Create SVG
 var SVG_WIDTH = 960;
 var SVG_HEIGHT = 700;
-var width = SVG_WIDTH;
-var height = SVG_HEIGHT;
-var svg = d3.select("body").append("svg")
-    .attr("width", width)
-    .attr("height", height);
 
-// Overlay drop shadow
-var defs = svg.append("defs");
+var RELOAD_PAGE = false;
 
-var filter = defs.append("filter")
-    .attr("id", "dropShadow")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", "200%")
-    .attr("height", "200%")
 
-filter.append("feOffset")
-    .attr("in", "SourceAlpha")
-    .attr("result", "offsetOut")
-    .attr("dx", 3)
-    .attr("dy", 3)
+function redraw(redrawSeries) {
 
-filter.append("feGaussianBlur")
-    .attr("in", "offsetOut")
-    .attr("result", "blurredOut")
-    .attr("stdDeviation", 5)
+  // Get reference to map container
+  var mapElem = d3.select(".map");
 
-filter.append("feBlend")
-    .attr("in", "SourceGraphic")
-    .attr("in2", "blurredOut")
-    .attr("mode", "normal")
+  // Clear all contents
+  mapElem.selectAll("*").remove();
 
-// Add titles to the SVG
-var titleG = svg.append("g")
-    .attr("class", "title")
-    .attr("transform", "translate(0, 20)");
+  // Create header
+  mapElem
+    .append("div")
+    .append("span")
+    .append("h2")
+    .text("How Do California’s Traffic Fines and Fees Compare?");
 
-var title = titleG.append("text")
-    .attr("x", width / 2)
-    .attr("y", 10)
-    .style("font-size", "24px")
-    .attr("font-family", "Helvetica Neue")
-    .style("text-anchor", "middle")
-    .text(function() { return false ? usedSeries.title : "" })
+  var parentWidthPx = mapElem.style("width");
+  var parentWidth = +(parentWidthPx.replace("px", ""));
+  var scaleFactor = Math.min(1, parentWidth / SVG_WIDTH);
 
-var subTitle = titleG.append("text")
-    .attr("x", width / 2)
-    .attr("y", 35)
-    .style("font-size", "18px")
-    .attr("font-family", "Helvetica Neue")
-    .style("text-anchor", "middle")
-    .text(function() { return usedSeries.subTitle })
+  var LEGEND_Y = 650;
+  var LEGEND_X = 350;
 
-// Create select element and populate the options
-var select = d3.select("body").append("div")
-    .attr("class", "selectDiv")
-  .append("select")
-    .attr("name", "dataSeries")
-    .attr("id", "selectCtrl")
-    .on("change", function(d) {
-      var series = d3.select("#selectCtrl").node().value;
-      window.location.href = baseUrl + "?show=" + series;
-    })
-    .selectAll("option")
-    .data(dataSeries)
-  .enter().append("option")
-    .attr("value", function(d) { return d.key })
-    .text(function(d) { return d.title })
-    .property("selected", function(d) { return d.key === usedSeries.key });
+  // Get url and derive base url
+  var url = window.location.href;
+  var queryStart = url.search(/\?(.*)/);
+  if (queryStart === -1) queryStart = Infinity;
+  var baseUrl = url.substr(0, queryStart);
+  var fmt = d3.format(".2f");
 
-var footer = d3.select("body").append("div")
-    .attr("class", "footer")
+  // Get query string value
+  // (we're picking up the value of the first query string parameter)
+  var chosenSeries;
+  if (RELOAD_PAGE) {
+    var query = url.substring(queryStart + 1);
+    chosenSeries = query ? query.split("=")[1] : "";
+  } else {
+    chosenSeries = redrawSeries
+  }
 
-footer.append("span")
-  .append("a")
-    .attr("href", "https://www.lccr.com/")
-  .append("img")
-    .attr("src", "LCCR-logo-square.jpg")
-    .attr("height", 100)
-    .attr("width", 100)
+  // Define the three data series
+  var dataSeries = [
+    {
+      key: "redLight",
+      title: "Red Light Violations",
+      subTitle: "Average Ticket Amount",
+      domain: [0, 500],
+      steps: 10,
+      ca: 490
+    },
+    {
+      key: "speeding",
+      title: "Speeding Violations",
+      subTitle: "Average Ticket Amount",
+      domain: [0, 250],
+      steps: 5,
+      ca: 233
+    },
+    {
+      key: "stopSign",
+      title: "Stop Sign Violations",
+      subTitle: "Average Ticket Amount",
+      domain: [0, 300],
+      steps: 6,
+      ca: 238
+    }
+  ]
 
-var linkSpan = footer.append("span")
-    .style("vertical-align", "top")
+  // Set default series to red light violations
+  var usedSeries = dataSeries[0];
 
-linkSpan.append("span")
-    .style("margin-left", "20px")
-    .style("margin-top", "7px")
-    .style("vertical-align", "top")
-    .style("font-size", "13px")
-    .style("display", "block")
-  .append("a")
-    .attr("href", "http://bit.ly/2pZNAef")
-    .text("Report: Paying More for Being Poor – Bias and Disparity in California’s Traffic Court System");
-
-linkSpan.append("span")
-    .style("margin-left", "20px")
-    .style("margin-top", "7px")
-    .style("vertical-align", "top")
-    .style("font-size", "13px")
-    .style("display", "block")
-  .append("a")
-    .attr("href", "https://www.lccr.com")
-    .text("Source: Lawyers' Committee For Civil Rights of the San Francisco Bay Area");
-
-linkSpan.append("span")
-    .style("margin-left", "20px")
-    .style("margin-top", "7px")
-    .style("vertical-align", "top")
-    .style("font-size", "13px")
-    .style("display", "block")
-  .append("a")
-    .attr("href", "https://www.lccr.com/newsroom/news-press-releases/paying-poor-bias-disparity-californias-traffic-court-system/")
-    .text("Press Release: Paying More for Being Poor – Bias and Disparity in California’s Traffic Court System")
-
-// Get data
-d3.queue()
-    .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-    .defer(d3.json, "stateFines.json")
-    .await(go);
-
-function go(error, us, fineData) {
-  if (error) throw error;
-
-  var stateFines = d3.map();
-  var path = d3.geoPath();
-  var x = d3.scaleLinear()
-      .domain([1, 10])
-      .rangeRound([600, 860]);
-  var yTranslate = 20;
-
-  // Fill map
-  fineData.forEach(function(state) {
-    stateFines.set(state.fipsCode, state)
-  });
-
-  // Create rankings
-  dataSeries.forEach(function(d) {
-    var key = d.key;
-
-    var rankings = fineData.filter(function(d) {
-      if (d[key] && d[key].value && !isNaN(d[key].value) && d[key].value !== -1) {
-        return true;
-      }
-    }).map(function(d) {
-      return { state: d.short, value: d[key].value, fipsCode: d.fipsCode }
-    });
-
-    rankings.sort(function(a, b) {
-      return b.value - a.value;
-    })
-
-    rankings.forEach(function(r, i) {
-      var fipsCode = r.fipsCode;
-      var state = stateFines.get(fipsCode);
-      state[key].rank = i + 1;
-      stateFines.set(fipsCode, state);
-    })
+  // Attempt to find the series indicated by the user
+  dataSeries.some(function(d) {
+    if (d.key === chosenSeries) {
+      usedSeries = d;
+      return true;
+    }
   })
 
-  // Generate scale for opacity values
-  var opacityScale = d3.scaleLinear()
-      .domain(usedSeries.domain)
-      .range([0.1, 1]);
+  // Create select element and populate the options
+  var selectDivContainer = d3.select(".map").append("div")
+      .attr("class", "selectDivContainer");
 
-  var valueScale = d3.scaleLinear()
-      .domain([0, 500])
-      .range([0, 500]);
+  var select = selectDivContainer.append("div")
+      .attr("class", "selectDiv")
+    .append("select")
+      .attr("name", "dataSeries")
+      .attr("id", "selectCtrl")
+      .on("change", function(d) {
+        var series = d3.select("#selectCtrl").node().value;
+        if (RELOAD_PAGE) {
+          window.location.href = baseUrl + "?show=" + series;
+        } else {
+          redraw(series);
+        }
+      })
+      .selectAll("option")
+      .data(dataSeries)
+    .enter().append("option")
+      .attr("value", function(d) { return d.key })
+      .text(function(d) { return d.title })
+      .property("selected", function(d) { return d.key === usedSeries.key });
 
-  // Draw legend
-  var segmWidth = 50;
-  var segmHeight = 15;
-  var steps = usedSeries.steps;
+  // Create SVG
+  var width = SVG_WIDTH;
+  var height = SVG_HEIGHT;
+  var svg = d3.select(".map").append("svg")
+      .attr("width", width * scaleFactor)
+      .attr("height", height * scaleFactor)
+    .append("g")
+      .style("transform", "scale(" + scaleFactor + ")")
 
-  var data = d3.range(steps + 1).map(function(d) {
-    var value = d * 50;
-    return {
-      value: value,
-      color: "rgba(8, 48, 107, " + opacityScale(value) + ")",
-      x: d * segmWidth,
-      y: 0,
-      width: segmWidth,
-      height: segmHeight
-    }
-  });
+  // Overlay drop shadow
+  var defs = svg.append("defs");
 
-  var legendG = svg.append("g")
-      .attr("transform", "translate(" + LEGEND_X + ", " + LEGEND_Y + ")")
-
-  var legendTitle = legendG.append("text")
-      .attr("x", -130)
-      .attr("y", 12)
-      .style("font-size", "15px")
-      .style("font-family", "Helvetica Neue")
-      .text("Average Ticket $")
-
-  var legendRects = legendG.selectAll(".legendRect")
-      .data(data.slice(0, steps))
-    .enter().append("rect")
-      .attr("class", "legendRect")
-      .attr("x", function(d) { return d.x })
-      .attr("y", function(d) { return d.y })
-      .attr("width", function(d) { return d.width })
-      .attr("height", function(d) { return d.height })
-      .style("fill", function(d)  { return d.color })
-      .style("stroke", "white")
-
-  var ticks = legendG.selectAll(".legendTick")
-      .data(data.slice())
-    .enter().append("line")
-      .attr("class", "legendTick")
-      .attr("x1", function(d) { return d.x })
-      .attr("x2", function(d) { return d.x })
-      .attr("y1", function(d) { return d.height })
-      .attr("y2", 20)
-      .style("stroke", "black")
-
-  var labels = legendG.selectAll(".legendText")
-      .data(data.slice())
-    .enter().append("text")
-      .attr("class", "legendText")
-      .attr("x", function(d) { return d.x })
-      .attr("y", 30)
-      .style("font-size", "10px")
-      .style("font-family", "Helvetica Neue")
-      .style("text-anchor", "middle")
-      .text(function(d) { return d.value })
-
-  var ca = legendG.append("line")
-      .attr("x1", usedSeries.ca)
-      .attr("x2", usedSeries.ca)
-      .attr("y1", -15)
-      .attr("y2", 0)
-      .style("stroke", "darkred")
-      .style("stroke-width", "2px")
-
-  var caText = legendG.append("text")
-      .attr("x", usedSeries.ca)
-      .attr("y", -18)
-      .style("font-size", "11px")
-      .style("font-family", "Helvetica Neue")
-      .style("text-anchor", "middle")
-      .style("fill", "darkred")
-      .text("CA")
-
-  var noData = legendG.append("rect")
-      .attr("x", -250)
+  var filter = defs.append("filter")
+      .attr("id", "dropShadow")
+      .attr("x", 0)
       .attr("y", 0)
-      .attr("width", 50)
-      .attr("height", 15)
-      .style("fill", "beige")
-      .style("stroke", "black")
+      .attr("width", "200%")
+      .attr("height", "200%")
 
-  var noDataText = legendG.append("text")
-      .attr("x", -305)
-      .attr("y", 12)
-      .style("font-size", "12px")
-      .style("font-family", "Helvetica Neue")
-      .text("No Data");
+  filter.append("feOffset")
+      .attr("in", "SourceAlpha")
+      .attr("result", "offsetOut")
+      .attr("dx", 3)
+      .attr("dy", 3)
 
-  var valueLines = legendG.selectAll(".values")
-      .data(fineData
-          .filter(function(d) { return !(d[usedSeries.key] === undefined || d[usedSeries.key].value === -1) })
-          .map(function(d) { return { state: d.state, short: d.short, value: d[usedSeries.key].value } })
-        )
-    .enter().append("line")
-        .attr("class", "values")
-        .attr("x1", function(d) { return valueScale(d.value) })
-        .attr("x2", function(d) { return valueScale(d.value) })
-        .attr("y1", -10)
-        .attr("y2", 0)
+  filter.append("feGaussianBlur")
+      .attr("in", "offsetOut")
+      .attr("result", "blurredOut")
+      .attr("stdDeviation", 5)
+
+  filter.append("feBlend")
+      .attr("in", "SourceGraphic")
+      .attr("in2", "blurredOut")
+      .attr("mode", "normal")
+
+  // Add titles to the SVG
+  var titleG = svg.append("g")
+      .attr("class", "title")
+      .attr("transform", "translate(0, 20)");
+
+/*
+  var title = titleG.append("text")
+      .attr("x", width / 2)
+      .attr("y", 10)
+      .style("font-size", "24px")
+      .attr("font-family", "Helvetica Neue")
+      .style("text-anchor", "middle")
+      .text(function() { return false ? usedSeries.title : "" })
+*/
+
+  var subTitle = titleG.append("text")
+      .attr("x", width / 2)
+      .attr("y", 35)
+      .style("font-size", "20px")
+      .attr("font-family", "Helvetica Neue")
+      .style("text-anchor", "middle")
+      .text(function() { return usedSeries.subTitle })
+
+
+  var footer = d3.select(".map").append("div")
+      .attr("class", "footer")
+
+  footer.append("span")
+    .append("a")
+      .attr("href", "https://www.lccr.com/")
+    .append("img")
+      .attr("src", "LCCR-logo-square.jpg")
+      .attr("height", 100)
+      .attr("width", 100)
+
+  var linkSpan = footer.append("span")
+      .style("vertical-align", "top")
+
+  linkSpan.append("span")
+      .style("margin-left", "20px")
+      .style("margin-top", "7px")
+      .style("vertical-align", "top")
+      .style("font-size", "13px")
+      .style("display", "block")
+    .append("a")
+      .attr("href", "http://bit.ly/2pZNAef")
+      .text("Report: Paying More for Being Poor – Bias and Disparity in California’s Traffic Court System");
+
+  linkSpan.append("span")
+      .style("margin-left", "20px")
+      .style("margin-top", "7px")
+      .style("vertical-align", "top")
+      .style("font-size", "13px")
+      .style("display", "block")
+    .append("a")
+      .attr("href", "https://www.lccr.com")
+      .text("Source: Lawyers' Committee For Civil Rights of the San Francisco Bay Area");
+
+  linkSpan.append("span")
+      .style("margin-left", "20px")
+      .style("margin-top", "7px")
+      .style("vertical-align", "top")
+      .style("font-size", "13px")
+      .style("display", "block")
+    .append("a")
+      .attr("href", "https://www.lccr.com/newsroom/news-press-releases/paying-poor-bias-disparity-californias-traffic-court-system/")
+      .text("Press Release: Paying More for Being Poor – Bias and Disparity in California’s Traffic Court System")
+
+  // Get data
+  d3.queue()
+      .defer(d3.json, "https://d3js.org/us-10m.v1.json")
+      .defer(d3.json, "stateFines.json")
+      .await(go);
+
+  function go(error, us, fineData) {
+    if (error) throw error;
+
+    var stateFines = d3.map();
+    var path = d3.geoPath();
+    var x = d3.scaleLinear()
+        .domain([1, 10])
+        .rangeRound([600, 860]);
+    var yTranslate = 20;
+
+    // Fill map
+    fineData.forEach(function(state) {
+      stateFines.set(state.fipsCode, state)
+    });
+
+    // Create rankings
+    dataSeries.forEach(function(d) {
+      var key = d.key;
+
+      var rankings = fineData.filter(function(d) {
+        if (d[key] && d[key].value && !isNaN(d[key].value) && d[key].value !== -1) {
+          return true;
+        }
+      }).map(function(d) {
+        return { state: d.short, value: d[key].value, fipsCode: d.fipsCode }
+      });
+
+      rankings.sort(function(a, b) {
+        return b.value - a.value;
+      })
+
+      rankings.forEach(function(r, i) {
+        var fipsCode = r.fipsCode;
+        var state = stateFines.get(fipsCode);
+        state[key].rank = i + 1;
+        stateFines.set(fipsCode, state);
+      })
+    })
+
+    // Generate scale for opacity values
+    var opacityScale = d3.scaleLinear()
+        .domain(usedSeries.domain)
+        .range([0.1, 1]);
+
+    var valueScale = d3.scaleLinear()
+        .domain([0, 500])
+        .range([0, 500]);
+
+    // Draw legend
+    var segmWidth = 50;
+    var segmHeight = 15;
+    var steps = usedSeries.steps;
+
+    var data = d3.range(steps + 1).map(function(d) {
+      var value = d * 50;
+      return {
+        value: value,
+        color: "rgba(8, 48, 107, " + opacityScale(value) + ")",
+        x: d * segmWidth,
+        y: 0,
+        width: segmWidth,
+        height: segmHeight
+      }
+    });
+
+    var legendG = svg.append("g")
+        .attr("transform", "translate(" + LEGEND_X + ", " + LEGEND_Y + ")")
+
+    var legendTitle = legendG.append("text")
+        .attr("x", -130)
+        .attr("y", 12)
+        .style("font-size", "15px")
+        .style("font-family", "Helvetica Neue")
+        .text("Average Ticket $")
+
+    var legendRects = legendG.selectAll(".legendRect")
+        .data(data.slice(0, steps))
+      .enter().append("rect")
+        .attr("class", "legendRect")
+        .attr("x", function(d) { return d.x })
+        .attr("y", function(d) { return d.y })
+        .attr("width", function(d) { return d.width })
+        .attr("height", function(d) { return d.height })
+        .style("fill", function(d)  { return d.color })
+        .style("stroke", "white")
+
+    var ticks = legendG.selectAll(".legendTick")
+        .data(data.slice())
+      .enter().append("line")
+        .attr("class", "legendTick")
+        .attr("x1", function(d) { return d.x })
+        .attr("x2", function(d) { return d.x })
+        .attr("y1", function(d) { return d.height })
+        .attr("y2", 20)
         .style("stroke", "black")
-        .style("stroke-width", 1);
 
-  var valueBox = legendG.append("rect")
-        .attr("class", "valueBox")
-        .attr("width", 24)
-        .attr("height", 16)
-        .attr("x", 0)
-        .attr("y", -30)
-        .attr("rx", 3)
-        .attr("ry", 3)
-        .style("fill", "darkred")
+    var labels = legendG.selectAll(".legendText")
+        .data(data.slice())
+      .enter().append("text")
+        .attr("class", "legendText")
+        .attr("x", function(d) { return d.x })
+        .attr("y", 30)
+        .style("font-size", "10px")
+        .style("font-family", "Helvetica Neue")
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.value })
 
-  var valueText = legendG.append("text")
-        .attr("class", "valueText")
+    var ca = legendG.append("line")
+        .attr("x1", usedSeries.ca)
+        .attr("x2", usedSeries.ca)
+        .attr("y1", -15)
+        .attr("y2", 0)
+        .style("stroke", "darkred")
+        .style("stroke-width", "2px")
+
+    var caText = legendG.append("text")
+        .attr("x", usedSeries.ca)
         .attr("y", -18)
-        .attr("x", 0)
-        .text("");
+        .style("font-size", "11px")
+        .style("font-family", "Helvetica Neue")
+        .style("text-anchor", "middle")
+        .style("fill", "darkred")
+        .text("CA")
 
-  legendCtrl();
+    var noData = legendG.append("rect")
+        .attr("x", -250)
+        .attr("y", 0)
+        .attr("width", 50)
+        .attr("height", 15)
+        .style("fill", "beige")
+        .style("stroke", "black")
 
-  var mouseState = "idle";
+    var noDataText = legendG.append("text")
+        .attr("x", -305)
+        .attr("y", 12)
+        .style("font-size", "12px")
+        .style("font-family", "Helvetica Neue")
+        .text("No Data");
+
+    var valueLines = legendG.selectAll(".values")
+        .data(fineData
+            .filter(function(d) { return !(d[usedSeries.key] === undefined || d[usedSeries.key].value === -1) })
+            .map(function(d) { return { state: d.state, short: d.short, value: d[usedSeries.key].value } })
+          )
+      .enter().append("line")
+          .attr("class", "values")
+          .attr("x1", function(d) { return valueScale(d.value) })
+          .attr("x2", function(d) { return valueScale(d.value) })
+          .attr("y1", -10)
+          .attr("y2", 0)
+          .style("stroke", "black")
+          .style("stroke-width", 1);
+
+    var valueBox = legendG.append("rect")
+          .attr("class", "valueBox")
+          .attr("width", 24)
+          .attr("height", 16)
+          .attr("x", 0)
+          .attr("y", -30)
+          .attr("rx", 3)
+          .attr("ry", 3)
+          .style("fill", "darkred")
+
+    var valueText = legendG.append("text")
+          .attr("class", "valueText")
+          .attr("y", -18)
+          .attr("x", 0)
+          .text("");
+
+    legendCtrl();
+
+    var mouseState = "idle";
+
     // Draw map
     svg.append("g")
         .attr("class", "counties")
@@ -476,159 +525,152 @@ function go(error, us, fineData) {
             overlayCtrl(true, x, y)
           }
         })
-  /*
-      // Draw hover over title
-      .append("title")
-        .text(function(d) {
-          var id = d.id;
-          var state = stateFines.get(id);
-          var key = usedSeries.key;
-          var stateName = state.state;
-          var stateValue = state[key] ? state[key].value : "N/A";
-          var stateRange = state[key] ? (state[key].range + "").split("-") : [];
-          title = stateName + ": $" + fmt(stateValue);
-          return title;
-        });
-  */
 
-  //overlayGroup.attr("transform", "translate(0, -1000)");
+    //overlayGroup.attr("transform", "translate(0, -1000)");
 
-  // Draw the boundaries of states
-  svg.append("path")
-      .attr("transform", "translate(0, " + yTranslate + ")")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("class", "states")
-      .attr("d", path);
+    // Draw the boundaries of states
+    svg.append("path")
+        .attr("transform", "translate(0, " + yTranslate + ")")
+        .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+        .attr("class", "states")
+        .attr("d", path);
 
-  var pathGroup = svg.append("g")
+    var pathGroup = svg.append("g")
 
-  var overlayGroup = svg.append("g")
-      .attr("transform", "translate(0, -1000)");
+    var overlayGroup = svg.append("g")
+        .attr("transform", "translate(0, -1000)");
 
-  var OVERLAY_WIDTH = 200;
-  var OVERLAY_HEIGHT_SMALL = 105;
-  var OVERLAY_HEIGHT_LARGE = 120;
+    var OVERLAY_WIDTH = 200;
+    var OVERLAY_HEIGHT_SMALL = 105;
+    var OVERLAY_HEIGHT_LARGE = 120;
 
-  var overlayRect = overlayGroup.append("rect")
-      .attr("class", "overlay")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("rx", 5)
-      .attr("ry", 5)
-      .attr("width", OVERLAY_WIDTH)
-      .attr("height", function() { return usedSeries.key === "speeding" ?
-          OVERLAY_HEIGHT_LARGE : OVERLAY_HEIGHT_SMALL })
-      .style("fill", "white")
-      .style("stroke", "gray")
-      .style("filter", "url(#dropShadow)")
+    var overlayRect = overlayGroup.append("rect")
+        .attr("class", "overlay")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("rx", 5)
+        .attr("ry", 5)
+        .attr("width", OVERLAY_WIDTH)
+        .attr("height", function() { return usedSeries.key === "speeding" ?
+            OVERLAY_HEIGHT_LARGE : OVERLAY_HEIGHT_SMALL })
+        .style("fill", "white")
+        .style("stroke", "gray")
+        .style("filter", "url(#dropShadow)")
 
-  var overlayTextGroup = overlayGroup.append("g")
+    var overlayTextGroup = overlayGroup.append("g")
 
-  var value;
-  function overlayCtrl(show, posX, posY, data) {
-    if (show) {
-      // Not all callers supply the data parameter...
-      value = data && data.value ? data.value : value;
+    var value;
+    function overlayCtrl(show, posX, posY, data) {
+      if (show) {
+        // Not all callers supply the data parameter...
+        value = data && data.value ? data.value : value;
 
-      var translateX = posX < (SVG_WIDTH / 2) ? posX + 15 : posX - OVERLAY_WIDTH - 15
-      var translateY = posY < (SVG_HEIGHT * 0.6) ? posY : posY - OVERLAY_HEIGHT_SMALL - 15
-      overlayGroup
-        .attr("transform", "translate(" + translateX + "," + translateY + ")")
+        var translateX = posX < (SVG_WIDTH / 2) ? posX + 15 : posX - OVERLAY_WIDTH - 15
+        var translateY = posY < (SVG_HEIGHT * 0.6) ? posY : posY - OVERLAY_HEIGHT_SMALL - 15
+        overlayGroup
+          .attr("transform", "translate(" + translateX + "," + translateY + ")")
 
-      if (data) {
-        // Clear text group
-        overlayTextGroup.selectAll("*").remove();
+        if (data) {
+          // Clear text group
+          overlayTextGroup.selectAll("*").remove();
 
-        var x = 10
-        var currY = 0;
-        var spacing = 15;
+          var x = 10
+          var currY = 0;
+          var spacing = 15;
 
-        overlayTextGroup.selectAll("text")
-            .data([
-                { title: true, text: data.name, indent: 0 },
-                { title: false, text: "Fines", indent: 0, spacing: 3 },
-                { title: false, text: "- Base Cost: " + data.base, indent: 8 },
-                { title: false, text: "- Total Cost: " + data.range, indent: 8 },
-                { title: false, text: "- Cost Used: " + (data.value === "N/A" ? data.value : fmt(data.value)), indent: 8 },
-                { title: false, text: "Rank: " + (data.rank === "N/A" ? data.rank : data.rank), indent: 0 },
-                { title: false, text: data.definition ? data.definition : "", indent: 0 },
-              ])
-          .enter().append("text")
-            .attr("class", function(d) { return d.title ? "overlayTitle" : "overlayItem" })
-            .attr("x", function(d) { return x + d.indent })
-            .attr("y", function(d) { return (currY += spacing + (d.spacing || 0), currY) })
-            .text(function(d) { return d.text });
+          overlayTextGroup.selectAll("text")
+              .data([
+                  { title: true, text: data.name, indent: 0 },
+                  { title: false, text: "Fines", indent: 0, spacing: 3 },
+                  { title: false, text: "- Base Cost: " + data.base, indent: 8 },
+                  { title: false, text: "- Total Cost: " + data.range, indent: 8 },
+                  { title: false, text: "- Cost Used: " + (data.value === "N/A" ? data.value : fmt(data.value)), indent: 8 },
+                  { title: false, text: "Rank: " + (data.rank === "N/A" ? data.rank : data.rank), indent: 0 },
+                  { title: false, text: data.definition ? data.definition : "", indent: 0 },
+                ])
+            .enter().append("text")
+              .attr("class", function(d) { return d.title ? "overlayTitle" : "overlayItem" })
+              .attr("x", function(d) { return x + d.indent })
+              .attr("y", function(d) { return (currY += spacing + (d.spacing || 0), currY) })
+              .text(function(d) { return d.text });
 
-        overlayTextGroup.append("line")
-            .attr("x1", x)
-            .attr("y1", 20)
-            .attr("x2", OVERLAY_WIDTH - 10)
-            .attr("y2", 20)
-            .attr("stroke", "black")
+          overlayTextGroup.append("line")
+              .attr("x1", x)
+              .attr("y1", 20)
+              .attr("x2", OVERLAY_WIDTH - 10)
+              .attr("y2", 20)
+              .attr("stroke", "black")
+        }
+
+        /*
+        pathGroup.selectAll("*").remove();
+        //console.log(value)
+        var pathStartX = posX + 40;
+        var pathStartY = posY + 100;
+        var pathEndX = isNaN(value) ? 140 : 350 + value
+        var pathEndY = 650;
+        var pathCtrlStartX = pathStartX;
+        var pathCtrlStartY = pathStartY + 60
+        var pathCtrlEndX = pathEndX;
+        var pathCtrlEndY = pathEndY - 60
+        var path = pathGroup.append("path")
+            .attr("d", function() {
+              return "M " + pathStartX + "," + pathStartY + " C " +
+                pathCtrlStartX + "," + pathCtrlStartY     + " " +
+                pathCtrlEndX +   "," + pathCtrlEndY       + " " +
+                pathEndX +       "," + pathEndY;
+            })
+            .style("stroke", "gray")
+            .style("stroke-width", 1)
+            .style("fill", "none")
+        */
+
+        // Update legend control
+        if (data) legendCtrl(data.short)
+
+      } else {
+        overlayGroup.attr("transform", "translate(0, -1000)");
+        pathGroup.selectAll("*").remove();
       }
+    }
 
-      /*
-      pathGroup.selectAll("*").remove();
-      //console.log(value)
-      var pathStartX = posX + 40;
-      var pathStartY = posY + 100;
-      var pathEndX = isNaN(value) ? 140 : 350 + value
-      var pathEndY = 650;
-      var pathCtrlStartX = pathStartX;
-      var pathCtrlStartY = pathStartY + 60
-      var pathCtrlEndX = pathEndX;
-      var pathCtrlEndY = pathEndY - 60
-      var path = pathGroup.append("path")
-          .attr("d", function() {
-            return "M " + pathStartX + "," + pathStartY + " C " +
-              pathCtrlStartX + "," + pathCtrlStartY     + " " +
-              pathCtrlEndX +   "," + pathCtrlEndY       + " " +
-              pathEndX +       "," + pathEndY;
-          })
-          .style("stroke", "gray")
-          .style("stroke-width", 1)
-          .style("fill", "none")
-      */
+    function legendCtrl(state) {
 
-      // Update legend control
-      if (data) legendCtrl(data.short)
+      valueLines
+          .attr("class", "values")
+          .attr("x1", function(d) { return valueScale(d.value) })
+          .attr("x2", function(d) { return valueScale(d.value) })
+          .attr("y1", function(d) { return state === d.short ? -15 : -10 })
+          .attr("y2", 0)
+          .style("stroke", function(d) { return state === d.short ? "red" : "black" })
+          .style("stroke-width", function(d) { return state === d.short ? 2 : 1 })
 
-    } else {
-      overlayGroup.attr("transform", "translate(0, -1000)");
-      pathGroup.selectAll("*").remove();
+      var selectedPos;
+      fineData.some(function(d) {
+        if (d.short === state) {
+          selectedPos = (d[usedSeries.key] && d[usedSeries.key].value) ? valueScale(d[usedSeries.key].value) : -1
+          return true;
+        }
+      });
+
+      valueBox
+          .attr("x", selectedPos - 11)
+          .style("fill", function(d) {
+            return selectedPos === -1 ? "none" : "darkred";
+          });
+
+      valueText
+          .attr("x", selectedPos)
+          .text(state);
     }
   }
 
-  function legendCtrl(state) {
-
-    valueLines
-        .attr("class", "values")
-        .attr("x1", function(d) { return valueScale(d.value) })
-        .attr("x2", function(d) { return valueScale(d.value) })
-        .attr("y1", function(d) { return state === d.short ? -15 : -10 })
-        .attr("y2", 0)
-        .style("stroke", function(d) { return state === d.short ? "red" : "black" })
-        .style("stroke-width", function(d) { return state === d.short ? 2 : 1 })
-
-    var selectedPos;
-    fineData.some(function(d) {
-      if (d.short === state) {
-        selectedPos = (d[usedSeries.key] && d[usedSeries.key].value) ? valueScale(d[usedSeries.key].value) : -1
-        return true;
-      }
-    });
-
-    valueBox
-        .attr("x", selectedPos - 11)
-        .style("fill", function(d) {
-          return selectedPos === -1 ? "none" : "darkred";
-        });
-
-    valueText
-        .attr("x", selectedPos)
-        .text(state);
-  }
-
 }
+
+redraw();
+
+// Redraw whenever window is resized
+window.addEventListener("resize", redraw);
+
 
 </script>
