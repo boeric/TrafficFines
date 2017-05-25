@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- Version 0.9.2 -->
+<!-- Version 0.9.3 -->
 <!-- Adapted and expanded by Bo Ericsson, boe@net -->
 <!-- Created for LCCR, https://www.lccr.com/ -->
 <!-- Based on Mike Bostock's example: https://bl.ocks.org/mbostock/4060606 -->
@@ -17,6 +17,7 @@ body {
   font-family: museo-sans, sans-serif;
   font-style: normal;
   font-weight: 300;
+  overflow: scroll;
 }
 .states {
   fill: none;
@@ -97,6 +98,7 @@ function redraw(redrawSeries) {
   var parentWidthPx = mapElem.style("width");
   var parentWidth = +(parentWidthPx.replace("px", ""));
   var scaleFactor = Math.min(1, parentWidth / SVG_WIDTH);
+  scaleFactor = Math.max(0.6, scaleFactor);
 
   var LEGEND_Y = 650;
   var LEGEND_X = 350;
